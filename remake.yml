@@ -1,0 +1,108 @@
+#
+# remake.yml for `TIGER2015` package (data-raw/)
+#
+
+sources:
+  - data-raw/remake.R
+  - data-raw/make_TIGER.R
+  - data-raw/use_geodata.R
+  - data/SFBA_COUNTY_FIPS_CODES.R
+
+targets:
+
+  all:
+    depends:
+      - data
+
+  data:
+    depends:
+      - TIGER2015
+
+  TIGER2015:
+    depends:
+      - TIGER2015-CBSAs
+      - TIGER2015-counties
+      - TIGER2015-tracts
+      - TIGER2015-blkgrps
+      - TIGER2015-blocks
+
+  TIGER2015-CBSAs:
+    depends:
+      - data/TIGER2015_CA_CBSAs.rda
+
+  TIGER2015-counties:
+    depends:
+      - data/TIGER2015_CA_counties.rda
+      - data/TIGER2015_SFBA_counties.rda
+
+  TIGER2015-tracts:
+    depends:
+      - data/TIGER2015_CA_tracts.rda
+      - data/TIGER2015_SFBA_tracts.rda
+
+  TIGER2015-blkgrps:
+    depends:
+      - data/TIGER2015_SFBA_blkgrps.rda
+
+  TIGER2015-blocks:
+    depends:
+      - data/TIGER2015_SFBA_blocks.rda
+
+  data/TIGER2015_CA_CBSAs.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_CA_CBSAs)
+
+  data/TIGER2015_CA_counties.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_CA_counties)
+
+  data/TIGER2015_SFBA_counties.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_SFBA_counties)
+
+  data/TIGER2015_CA_tracts.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_CA_tracts)
+
+  data/TIGER2015_SFBA_tracts.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_SFBA_tracts)
+
+  data/TIGER2015_SFBA_blkgrps.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_SFBA_blkgrps)
+
+  #data/TIGER2015_SFBA_blocks_simplified.rda:
+  #  cleanup_level: tidy
+  #  command: use_geodata(TIGER2015_SFBA_blocks_simplified)
+
+  data/TIGER2015_SFBA_blocks.rda:
+    cleanup_level: tidy
+    command: use_geodata(TIGER2015_SFBA_blocks)
+
+  TIGER2015_CA_CBSAs:
+    command: make_TIGER_CA_CBSAs()
+
+  TIGER2015_CA_counties:
+    command: make_TIGER_CA_counties()
+
+  TIGER2015_SFBA_counties:
+    command: make_TIGER_SFBA_counties(TIGER2015_CA_counties)
+
+  TIGER2015_CA_tracts:
+    command: make_TIGER_CA_tracts()
+
+  TIGER2015_SFBA_tracts:
+    command: make_TIGER_SFBA_tracts(TIGER2015_CA_tracts)
+
+  TIGER2015_SFBA_blkgrps:
+    cleanup_level: clean
+    command: make_TIGER_SFBA_blkgrps()
+
+  #TIGER2015_SFBA_blocks_simplified:
+  #  cleanup_level: purge
+  #  command: make_TIGER2015_SFBA_blocks_simplified(TIGER2015_SFBA_blocks)
+
+  TIGER2015_SFBA_blocks:
+    cleanup_level: purge
+    command: make_TIGER_SFBA_blocks()
